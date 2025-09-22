@@ -6,14 +6,7 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     sourcemap: false,
-    minify: 'terser',
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['vite']
-        }
-      }
-    }
+    minify: 'esbuild'
   },
   server: {
     port: 3000,
