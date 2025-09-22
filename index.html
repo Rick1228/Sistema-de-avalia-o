@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caninos - Sistema de Avaliação</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Moderno -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo">
+                        <i class="fas fa-paw"></i>
+                        <div class="logo-text">
+                            <span class="cani">cani</span><span class="nos">nos</span>
+                        </div>
+                    </div>
+                    <div class="company-info">
+                        <span class="company-tagline" id="header-title">Sistema de Avaliação</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Página Inicial -->
+        <main class="main-content">
+            <div id="home-tab" class="tab-content active">
+                <div class="hero-section">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Sua opinião é muito importante para nós!</h1>
+                        <p class="hero-subtitle">Ajude-nos a melhorar nossos serviços avaliando sua experiência</p>
+                    </div>
+                </div>
+
+                <div class="evaluation-cards">
+                    <div class="evaluation-card" onclick="showTab('attendance')">
+                        <div class="card-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Avaliar Atendimento</h3>
+                            <p>Como foi sua experiência com nossa equipe de atendimento?</p>
+                        </div>
+                        <div class="card-action">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+
+                    <div class="evaluation-card" onclick="showTab('delivery')">
+                        <div class="card-icon">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Avaliar Entrega</h3>
+                            <p>Como foi sua experiência com nosso serviço de entrega?</p>
+                        </div>
+                        <div class="card-action">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Avaliação de Atendimento -->
+            <div id="attendance-tab" class="tab-content">
+                <div class="evaluation-container">
+                    <div class="evaluation-header">
+                        <div class="evaluation-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <div class="evaluation-title">
+                            <h2>Avaliação de Atendimento</h2>
+                            <p>Conte-nos sobre sua experiência</p>
+                        </div>
+                    </div>
+
+                    <form id="attendance-form" class="evaluation-form">
+                        <div class="form-actions-top">
+                            <button type="button" class="btn-outline btn-small" onclick="showTab('home')">
+                                <i class="fas fa-arrow-left"></i>
+                                Voltar
+                            </button>
+                        </div>
+
+                        <div class="form-section">
+                            <label for="attendance-name" class="form-label">
+                                <i class="fas fa-user"></i>
+                                Nome (opcional)
+                            </label>
+                            <input type="text" id="attendance-name" name="name" placeholder="Seu nome" class="form-input">
+                        </div>
+
+                        <div class="form-section">
+                            <label class="form-label">
+                                <i class="fas fa-star"></i>
+                                Como você avalia nosso atendimento?
+                            </label>
+                            <div class="rating-container">
+                                <div class="emoji-rating" data-rating="attendance-satisfaction">
+                                    <div class="emoji-option" data-value="1">
+                                        <span class="emoji">😞</span>
+                                        <span class="emoji-label">Muito Ruim</span>
+                                    </div>
+                                    <div class="emoji-option" data-value="2">
+                                        <span class="emoji">😕</span>
+                                        <span class="emoji-label">Ruim</span>
+                                    </div>
+                                    <div class="emoji-option" data-value="3">
+                                        <span class="emoji">😐</span>
+                                        <span class="emoji-label">Regular</span>
+                                    </div>
+                                    <div class="emoji-option" data-value="4">
+                                        <span class="emoji">😊</span>
+                                        <span class="emoji-label">Bom</span>
+                                    </div>
+                                    <div class="emoji-option" data-value="5">
+                                        <span class="emoji">😍</span>
+                                        <span class="emoji-label">Excelente</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <label for="attendance-comments" class="form-label">
+                                <i class="fas fa-comment"></i>
+                                Comentários e sugestões
+                            </label>
+                            <textarea id="attendance-comments" name="comments" rows="4" placeholder="Conte-nos sua experiência e sugestões de melhoria..." class="form-textarea"></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-paper-plane"></i>
+                                Enviar Avaliação
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Avaliação de Entrega -->
+            <div id="delivery-tab" class="tab-content">
+                <div class="evaluation-container">
+                    <div class="evaluation-header">
+                        <div class="evaluation-icon">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <div class="evaluation-title">
+                            <h2>Avaliação de Entrega</h2>
+                            <p>Conte-nos sobre sua experiência</p>
+                        </div>
+                    </div>
+
+                    <form id="delivery-form" class="evaluation-form">
+                        <div class="form-actions-top">
+                            <button type="button" class="btn-outline btn-small" onclick="showTab('home')">
+                                <i class="fas fa-arrow-left"></i>
+                                Voltar
+                            </button>
+                        </div>
+
+                        <div class="form-section">
+                            <label for="delivery-name" class="form-label">
+                                <i class="fas fa-user"></i>
+                                Nome (opcional)
+                            </label>
+                            <input type="text" id="delivery-name" name="name" placeholder="Seu nome" class="form-input">
+                        </div>
+
+                        <div class="form-section">
+                            <label class="form-label">
+                                <i class="fas fa-star"></i>
+                                Como você avalia nossa entrega?
+                            </label>
+                            <div class="rating-container">
+                                <div class="emoji-rating" data-rating="delivery-satisfaction">
+                                    <div class="emoji-option" data-value="1">
+                                        <span class="emoji">😞</span>
+                                        <span class="emoji-label">Muito Ruim</span>
+                                    </div>
+                                    <div class="emoji-option" data-value="2">
+                                        <span class="emoji">😕</span>
+                                        <span class="emoji-label">Ruim</span>
+                                    </div>
+                                    <div class="emoji-option" data-value="3">
+                                        <span class="emoji">😐</span>
+                                        <span class="emoji-label">Regular</span>
+                                    </div>
+                                    <div class="emoji-option" data-value="4">
+                                        <span class="emoji">😊</span>
+                                        <span class="emoji-label">Bom</span>
+                                    </div>
+                                    <div class="emoji-option" data-value="5">
+                                        <span class="emoji">😍</span>
+                                        <span class="emoji-label">Excelente</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <label for="delivery-comments" class="form-label">
+                                <i class="fas fa-comment"></i>
+                                Comentários e sugestões
+                            </label>
+                            <textarea id="delivery-comments" name="comments" rows="4" placeholder="Conte-nos sua experiência e sugestões de melhoria..." class="form-textarea"></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-paper-plane"></i>
+                                Enviar Avaliação
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Modal de Sucesso -->
+        <div id="success-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-icon success">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="modal-body">
+                    <h3>Avaliação Enviada!</h3>
+                    <p>Obrigado pela sua avaliação! Ela foi salva com sucesso.</p>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="closeModal()" class="btn-primary">
+                        <i class="fas fa-check"></i>
+                        Entendi
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Erro -->
+        <div id="error-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-icon error">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="modal-body">
+                    <h3>Ops! Algo deu errado</h3>
+                    <p id="error-message">Ocorreu um erro ao enviar a avaliação.</p>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="closeModal()" class="btn-primary">
+                        <i class="fas fa-redo"></i>
+                        Tentar Novamente
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
