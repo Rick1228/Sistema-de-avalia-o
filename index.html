@@ -70,7 +70,7 @@
                 </div>
 
                 <div class="evaluation-cards">
-                    <div class="evaluation-card" onclick="showTab('attendance')">
+                    <div class="evaluation-card" data-tab="attendance">
                         <div class="card-icon">
                             <i class="fas fa-headset"></i>
                         </div>
@@ -83,7 +83,7 @@
                         </div>
                     </div>
 
-                    <div class="evaluation-card" onclick="showTab('delivery')">
+                    <div class="evaluation-card" data-tab="delivery">
                         <div class="card-icon">
                             <i class="fas fa-truck"></i>
                         </div>
@@ -114,7 +114,7 @@
 
                     <form id="attendance-form" class="evaluation-form">
                         <div class="form-actions-top">
-                            <button type="button" class="btn-outline btn-small" onclick="showTab('home')">
+                            <button type="button" class="btn-outline btn-small" data-action="back">
                                 <i class="fas fa-arrow-left"></i>
                                 Voltar
                             </button>
@@ -192,7 +192,7 @@
 
                     <form id="delivery-form" class="evaluation-form">
                         <div class="form-actions-top">
-                            <button type="button" class="btn-outline btn-small" onclick="showTab('home')">
+                            <button type="button" class="btn-outline btn-small" data-action="back">
                                 <i class="fas fa-arrow-left"></i>
                                 Voltar
                             </button>
@@ -268,7 +268,7 @@
                     <p>Obrigado pela sua avaliação! Ela foi salva com sucesso.</p>
                 </div>
                 <div class="modal-footer">
-                    <button onclick="closeModal()" class="btn-primary">
+                    <button data-action="close-modal" class="btn-primary">
                         <i class="fas fa-check"></i>
                         Entendi
                     </button>
@@ -287,7 +287,7 @@
                     <p id="error-message">Ocorreu um erro ao enviar a avaliação.</p>
                 </div>
                 <div class="modal-footer">
-                    <button onclick="closeModal()" class="btn-primary">
+                    <button data-action="close-modal" class="btn-primary">
                         <i class="fas fa-redo"></i>
                         Tentar Novamente
                     </button>

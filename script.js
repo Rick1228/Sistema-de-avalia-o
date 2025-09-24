@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeEmojis();
     initializeStars();
     initializeForms();
+    initializeEventListeners();
 });
 
 // Sistema de navegação por abas
@@ -420,12 +421,6 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Fechar modal ao clicar fora
-window.addEventListener('click', function(event) {
-    if (event.target.classList.contains('modal')) {
-        closeModal();
-    }
-});
 
 // Função para configurar Baserow (chamada pelo usuário)
 function configureBaserow(attendanceTableId, deliveryTableId, apiToken) {
@@ -438,5 +433,39 @@ function configureBaserow(attendanceTableId, deliveryTableId, apiToken) {
     console.log('URL Entrega:', BASEROW_CONFIG.DELIVERY_TABLE_URL);
 }
 
-// Exportar função para uso global
+// Inicializar event listeners
+function initializeEventListeners() {
+    // Event listeners para os cards de avaliação
+    document.querySelectorAll('.evaluation-card[data-tab]').forEach(card => {
+        card.addEventListener('click', function() {
+            const tabName = this.dataset.tab;
+            showTab(tabName);
+        });
+    });
+    
+    // Event listeners para botões de voltar
+    document.querySelectorAll('button[data-action="back"]').forEach(button => {
+        button.addEventListener('click', function() {
+            showTab('home');
+        });
+    });
+    
+    // Event listeners para fechar modais
+    document.querySelectorAll('button[data-action="close-modal"]').forEach(button => {
+        button.addEventListener('click', function() {
+            closeModal();
+        });
+    });
+    
+    // Event listener para fechar modal ao clicar fora
+    window.addEventListener('click', function(event) {
+        if (event.target.classList.contains('modal')) {
+            closeModal();
+        }
+    });
+}
+
+// Exportar funções para uso global (compatibilidade)
 window.configureBaserow = configureBaserow;
+window.showTab = showTab;
+window.closeModal = closeModal;
