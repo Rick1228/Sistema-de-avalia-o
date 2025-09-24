@@ -1,9 +1,9 @@
 // Configurações do Baserow
 const BASEROW_CONFIG = {
-    // Substitua estas URLs pelas suas tabelas do Baserow
-    ATTENDANCE_TABLE_URL: 'https://api.baserow.io/api/database/rows/table/YOUR_ATTENDANCE_TABLE_ID/',
-    DELIVERY_TABLE_URL: 'https://api.baserow.io/api/database/rows/table/YOUR_DELIVERY_TABLE_ID/',
-    API_TOKEN: 'YOUR_BASEROW_API_TOKEN' // Substitua pelo seu token de API
+    // URLs das suas tabelas do Baserow
+    ATTENDANCE_TABLE_URL: 'https://api.baserow.io/api/database/rows/table/684447/',
+    DELIVERY_TABLE_URL: 'https://api.baserow.io/api/database/rows/table/684453/',
+    API_TOKEN: 'WliGfvMy2o0WkI8LKP8Gk2dSWU4YeVmq'
 };
 
 // Estado global da aplicação
