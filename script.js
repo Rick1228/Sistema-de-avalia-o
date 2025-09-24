@@ -220,11 +220,11 @@ async function submitAttendanceForm() {
     }
     
     const data = {
-        name: formData.get('name') || 'Anônimo',
-        satisfaction_rating: currentRatings.attendance.satisfaction,
-        comments: formData.get('comments'),
-        date: new Date().toISOString(),
-        type: 'attendance'
+        'Nome (5654952)': formData.get('name') || 'Anônimo',
+        'Avaliação de 1-5 (5654966)': currentRatings.attendance.satisfaction,
+        'comentários e sugestões (5654967)': formData.get('comments'),
+        'Data da avaliação (5654968)': new Date().toISOString(),
+        'attendance (5654969)': 'attendance'
     };
     
     try {
@@ -263,11 +263,11 @@ async function submitDeliveryForm() {
     }
     
     const data = {
-        name: formData.get('name') || 'Anônimo',
-        satisfaction_rating: currentRatings.delivery.satisfaction,
-        comments: formData.get('comments'),
-        date: new Date().toISOString(),
-        type: 'delivery'
+        'Nome (5654975)': formData.get('name') || 'Anônimo',
+        'Avaliação de 1-5 (5654976)': currentRatings.delivery.satisfaction,
+        'Comentários e sugestões (5654977)': formData.get('comments'),
+        'Data da avaliação (5654978)': new Date().toISOString(),
+        'delivery (5654979)': 'delivery'
     };
     
     try {

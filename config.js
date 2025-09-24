@@ -3,14 +3,14 @@
 
 const CONFIG = {
     // URLs das suas tabelas do Baserow
-    // Substitua YOUR_ATTENDANCE_TABLE_ID pelo ID da sua tabela de atendimento
-    ATTENDANCE_TABLE_URL: 'https://api.baserow.io/api/database/rows/table/YOUR_ATTENDANCE_TABLE_ID/',
+    // Tabela de Atendimento (ID: 684447)
+    ATTENDANCE_TABLE_URL: 'https://api.baserow.io/api/database/rows/table/684447/',
     
-    // Substitua YOUR_DELIVERY_TABLE_ID pelo ID da sua tabela de entrega
-    DELIVERY_TABLE_URL: 'https://api.baserow.io/api/database/rows/table/YOUR_DELIVERY_TABLE_ID/',
+    // Tabela de Entrega (ID: 684453)
+    DELIVERY_TABLE_URL: 'https://api.baserow.io/api/database/rows/table/684453/',
     
-    // Substitua YOUR_API_TOKEN pelo seu token de API do Baserow
-    API_TOKEN: 'YOUR_API_TOKEN',
+    // Token de API do Baserow
+    API_TOKEN: 'WliGfvMy2o0WkI8LKP8Gk2dSWU4YeVmq',
     
     // Configurações opcionais
     APP_NAME: 'Sistema de Avaliação',
