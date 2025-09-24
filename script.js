@@ -227,6 +227,12 @@ async function submitAttendanceForm() {
         'attendance (5654969)': 'attendance'
     };
     
+    console.log('📝 Dados coletados do formulário de atendimento:');
+    console.log('👤 Nome:', formData.get('name'));
+    console.log('⭐ Avaliação:', currentRatings.attendance.satisfaction);
+    console.log('💬 Comentários:', formData.get('comments'));
+    console.log('📊 Dados finais:', data);
+    
     try {
         await saveToBaserow(data, 'attendance');
         showSuccess();
@@ -270,6 +276,12 @@ async function submitDeliveryForm() {
         'delivery (5654979)': 'delivery'
     };
     
+    console.log('📝 Dados coletados do formulário de entrega:');
+    console.log('👤 Nome:', formData.get('name'));
+    console.log('⭐ Avaliação:', currentRatings.delivery.satisfaction);
+    console.log('💬 Comentários:', formData.get('comments'));
+    console.log('📊 Dados finais:', data);
+    
     try {
         await saveToBaserow(data, 'delivery');
         showSuccess();
@@ -296,6 +308,12 @@ function validateRatings(type) {
 async function saveToBaserow(data, type) {
     const url = type === 'attendance' ? BASEROW_CONFIG.ATTENDANCE_TABLE_URL : BASEROW_CONFIG.DELIVERY_TABLE_URL;
     
+    console.log('🔍 Debug - Tentando salvar no Baserow:');
+    console.log('📊 Tipo:', type);
+    console.log('🌐 URL:', url);
+    console.log('🔑 Token:', BASEROW_CONFIG.API_TOKEN.substring(0, 10) + '...');
+    console.log('📝 Dados:', data);
+    
     const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -305,11 +323,19 @@ async function saveToBaserow(data, type) {
         body: JSON.stringify(data)
     });
     
+    console.log('📡 Resposta do Baserow:');
+    console.log('✅ Status:', response.status);
+    console.log('📋 Headers:', Object.fromEntries(response.headers.entries()));
+    
     if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorText = await response.text();
+        console.error('❌ Erro detalhado:', errorText);
+        throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
     }
     
-    return await response.json();
+    const result = await response.json();
+    console.log('✅ Sucesso! Dados salvos:', result);
+    return result;
 }
 
 // Salvar dados localmente (fallback)
