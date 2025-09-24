@@ -220,18 +220,24 @@ async function submitAttendanceForm() {
     }
     
     const data = {
-        'Nome (5654952)': formData.get('name') || 'Anônimo',
-        'Avaliação de 1-5 (5654966)': currentRatings.attendance.satisfaction,
-        'comentários e sugestões (5654967)': formData.get('comments'),
-        'Data da avaliação (5654968)': new Date().toISOString(),
-        'attendance (5654969)': 'attendance'
+        'Nome': formData.get('name') || 'Anônimo',
+        'Avaliação de 1-5': currentRatings.attendance.satisfaction,
+        'Comentários e sugestões': formData.get('comments'),
+        'Data da avaliação': new Date().toISOString().split('T')[0], // Formato YYYY-MM-DD
+        'attendance': 'attendance'
     };
     
     console.log('📝 Dados coletados do formulário de atendimento:');
     console.log('👤 Nome:', formData.get('name'));
     console.log('⭐ Avaliação:', currentRatings.attendance.satisfaction);
     console.log('💬 Comentários:', formData.get('comments'));
-    console.log('📊 Dados finais:', data);
+    console.log('📊 Dados finais para Baserow:', data);
+    console.log('🔍 Verificação dos campos:');
+    console.log('  - Campo Nome:', data['Nome']);
+    console.log('  - Campo Avaliação:', data['Avaliação de 1-5']);
+    console.log('  - Campo Comentários:', data['Comentários e sugestões']);
+    console.log('  - Campo Data:', data['Data da avaliação']);
+    console.log('  - Campo Tipo:', data['attendance']);
     
     try {
         await saveToBaserow(data, 'attendance');
@@ -269,18 +275,24 @@ async function submitDeliveryForm() {
     }
     
     const data = {
-        'Nome (5654975)': formData.get('name') || 'Anônimo',
-        'Avaliação de 1-5 (5654976)': currentRatings.delivery.satisfaction,
-        'Comentários e sugestões (5654977)': formData.get('comments'),
-        'Data da avaliação (5654978)': new Date().toISOString(),
-        'delivery (5654979)': 'delivery'
+        'Nome': formData.get('name') || 'Anônimo',
+        'Avaliação de 1-5': currentRatings.delivery.satisfaction,
+        'Comentários e sugestões': formData.get('comments'),
+        'Data da avaliação': new Date().toISOString().split('T')[0], // Formato YYYY-MM-DD
+        'delivery': 'delivery'
     };
     
     console.log('📝 Dados coletados do formulário de entrega:');
     console.log('👤 Nome:', formData.get('name'));
     console.log('⭐ Avaliação:', currentRatings.delivery.satisfaction);
     console.log('💬 Comentários:', formData.get('comments'));
-    console.log('📊 Dados finais:', data);
+    console.log('📊 Dados finais para Baserow:', data);
+    console.log('🔍 Verificação dos campos:');
+    console.log('  - Campo Nome:', data['Nome']);
+    console.log('  - Campo Avaliação:', data['Avaliação de 1-5']);
+    console.log('  - Campo Comentários:', data['Comentários e sugestões']);
+    console.log('  - Campo Data:', data['Data da avaliação']);
+    console.log('  - Campo Tipo:', data['delivery']);
     
     try {
         await saveToBaserow(data, 'delivery');
@@ -304,15 +316,68 @@ function validateRatings(type) {
     return Object.values(ratings).every(rating => rating > 0);
 }
 
+// Obter IDs dos campos do Baserow
+async function getFieldIds(tableId) {
+    try {
+        const response = await fetch(`https://api.baserow.io/api/database/fields/table/${tableId}/`, {
+            headers: {
+                'Authorization': `Token ${BASEROW_CONFIG.API_TOKEN}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const fields = await response.json();
+        console.log('🔍 Campos encontrados na tabela:', fields);
+        
+        // Criar mapeamento de nomes para IDs
+        const fieldMap = {};
+        fields.forEach(field => {
+            fieldMap[field.name] = field.id;
+            console.log(`📋 Campo: "${field.name}" | ID: ${field.id} | Tipo: ${field.type}`);
+        });
+        
+        return fieldMap;
+    } catch (error) {
+        console.error('❌ Erro ao buscar campos:', error);
+        return null;
+    }
+}
+
 // Salvar no Baserow
 async function saveToBaserow(data, type) {
     const url = type === 'attendance' ? BASEROW_CONFIG.ATTENDANCE_TABLE_URL : BASEROW_CONFIG.DELIVERY_TABLE_URL;
+    const tableId = type === 'attendance' ? '684447' : '684453';
     
     console.log('🔍 Debug - Tentando salvar no Baserow:');
     console.log('📊 Tipo:', type);
     console.log('🌐 URL:', url);
     console.log('🔑 Token:', BASEROW_CONFIG.API_TOKEN.substring(0, 10) + '...');
-    console.log('📝 Dados:', data);
+    console.log('📝 Dados originais:', data);
+    
+    // Obter IDs dos campos
+    const fieldMap = await getFieldIds(tableId);
+    
+    if (!fieldMap) {
+        throw new Error('Não foi possível obter os IDs dos campos');
+    }
+    
+    // Converter dados para usar IDs dos campos com prefixo field_
+    const dataWithFieldIds = {};
+    for (const [fieldName, value] of Object.entries(data)) {
+        const fieldId = fieldMap[fieldName];
+        if (fieldId) {
+            dataWithFieldIds[`field_${fieldId}`] = value;
+            console.log(`✅ Mapeado: "${fieldName}" -> field_${fieldId} = "${value}"`);
+        } else {
+            console.warn(`⚠️ Campo não encontrado: "${fieldName}"`);
+        }
+    }
+    
+    console.log('📝 Dados com IDs dos campos:', dataWithFieldIds);
     
     const response = await fetch(url, {
         method: 'POST',
@@ -320,7 +385,7 @@ async function saveToBaserow(data, type) {
             'Authorization': `Token ${BASEROW_CONFIG.API_TOKEN}`,
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(dataWithFieldIds)
     });
     
     console.log('📡 Resposta do Baserow:');
@@ -335,6 +400,26 @@ async function saveToBaserow(data, type) {
     
     const result = await response.json();
     console.log('✅ Sucesso! Dados salvos:', result);
+    
+    // Verificar se os dados realmente foram salvos
+    setTimeout(async () => {
+        try {
+            const verifyResponse = await fetch(`https://api.baserow.io/api/database/rows/table/${tableId}/`, {
+                headers: {
+                    'Authorization': `Token ${BASEROW_CONFIG.API_TOKEN}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (verifyResponse.ok) {
+                const rows = await verifyResponse.json();
+                console.log('🔍 Verificação - Dados na tabela:', rows);
+            }
+        } catch (error) {
+            console.error('❌ Erro na verificação:', error);
+        }
+    }, 1000);
+    
     return result;
 }
 
