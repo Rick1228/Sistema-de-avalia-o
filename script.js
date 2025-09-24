@@ -26,13 +26,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Sistema de navegação por abas
 function showTab(tabName) {
+    console.log('🔍 Debug - Navegando para aba:', tabName);
+    
     // Esconder todas as abas
     document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove('active');
     });
     
     // Mostrar aba selecionada
-    document.getElementById(tabName + '-tab').classList.add('active');
+    const targetTab = document.getElementById(tabName + '-tab');
+    if (targetTab) {
+        targetTab.classList.add('active');
+        console.log('✅ Aba ativada:', tabName + '-tab');
+    } else {
+        console.error('❌ Aba não encontrada:', tabName + '-tab');
+    }
     
     // Atualizar título do header
     updateHeaderTitle(tabName);
@@ -241,13 +249,13 @@ async function submitAttendanceForm() {
     
     try {
         await saveToBaserow(data, 'attendance');
-        showSuccess();
+        showSuccess('delivery'); // Navegar para tela de entrega após sucesso
         resetForm('attendance');
     } catch (error) {
         console.error('Erro ao salvar avaliação de atendimento:', error);
         // Salvar localmente como fallback
         saveLocalData(data, 'attendance');
-        showSuccess();
+        showSuccess('delivery'); // Navegar para tela de entrega mesmo com fallback
         resetForm('attendance');
     } finally {
         submitBtn.classList.remove('loading');
@@ -296,13 +304,13 @@ async function submitDeliveryForm() {
     
     try {
         await saveToBaserow(data, 'delivery');
-        showSuccess();
+        showSuccess('home'); // Navegar para tela inicial após sucesso
         resetForm('delivery');
     } catch (error) {
         console.error('Erro ao salvar avaliação de entrega:', error);
         // Salvar localmente como fallback
         saveLocalData(data, 'delivery');
-        showSuccess();
+        showSuccess('home'); // Navegar para tela inicial mesmo com fallback
         resetForm('delivery');
     } finally {
         submitBtn.classList.remove('loading');
@@ -461,17 +469,91 @@ function resetForm(type) {
 }
 
 // Mostrar modal de sucesso
-function showSuccess() {
+function showSuccess(nextTab = null) {
     const modal = document.getElementById('success-modal');
+    const modalTitle = modal.querySelector('h3');
+    const modalMessage = modal.querySelector('p');
+    
+    // Personalizar mensagem baseada na próxima tela
+    if (nextTab === 'delivery') {
+        modalTitle.textContent = 'Avaliação de Atendimento Enviada!';
+        modalMessage.textContent = 'Obrigado! Agora vamos para a avaliação de entrega.';
+    } else if (nextTab === 'home') {
+        modalTitle.textContent = 'Avaliação de Entrega Enviada!';
+        modalMessage.textContent = 'Obrigado por completar ambas as avaliações! Voltando ao início.';
+    } else {
+        modalTitle.textContent = 'Avaliação Enviada!';
+        modalMessage.textContent = 'Obrigado pela sua avaliação! Ela foi salva com sucesso.';
+    }
+    
     modal.style.display = 'block';
     
     // Adicionar animação de confete (opcional)
     createConfetti();
     
-    // Auto-fechar após 3 segundos
+    // Auto-fechar após 2 segundos e mostrar aviso de próxima avaliação
     setTimeout(() => {
         closeModal();
-    }, 3000);
+        
+        // Se foi especificada uma próxima tela, mostrar aviso
+        if (nextTab) {
+            showNextEvaluationWarning(nextTab);
+        }
+    }, 2000);
+}
+
+// Mostrar aviso de próxima avaliação
+function showNextEvaluationWarning(nextTab) {
+    console.log('🔍 Debug - Mostrando aviso de próxima avaliação:', nextTab);
+    
+    const warning = document.getElementById('next-evaluation-warning');
+    const warningText = document.getElementById('next-evaluation-text');
+    const countdownNumber = document.getElementById('countdown-number');
+    const skipButton = document.getElementById('skip-warning');
+    
+    // Personalizar texto baseado na próxima tela
+    if (nextTab === 'delivery') {
+        warningText.textContent = 'Agora vamos avaliar a qualidade da entrega do seu pedido.';
+    } else if (nextTab === 'home') {
+        warningText.textContent = 'Obrigado por completar todas as avaliações!';
+    }
+    
+    console.log('📝 Texto do aviso:', warningText.textContent);
+    
+    // Mostrar o aviso
+    warning.style.display = 'flex';
+    console.log('✅ Aviso exibido');
+    
+    // Iniciar countdown
+    let countdown = 3;
+    countdownNumber.textContent = countdown;
+    
+    const countdownInterval = setInterval(() => {
+        countdown--;
+        countdownNumber.textContent = countdown;
+        console.log('⏰ Countdown:', countdown);
+        
+        if (countdown <= 0) {
+            clearInterval(countdownInterval);
+            console.log('🚀 Navegando para:', nextTab);
+            hideNextEvaluationWarning();
+            showTab(nextTab);
+        }
+    }, 1000);
+    
+    // Botão para pular o aviso
+    skipButton.onclick = () => {
+        console.log('⏭️ Pulando aviso, navegando para:', nextTab);
+        clearInterval(countdownInterval);
+        hideNextEvaluationWarning();
+        showTab(nextTab);
+    };
+}
+
+// Esconder aviso de próxima avaliação
+function hideNextEvaluationWarning() {
+    const warning = document.getElementById('next-evaluation-warning');
+    warning.style.display = 'none';
 }
 
 // Mostrar modal de erro
